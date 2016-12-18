@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/widgetLayout"
     android:background="#C5C5C5"
     android:padding="@dimen/widget_margin">
 
@@ -13,12 +14,13 @@
         <ImageView
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:id="@+id/widgetIcon" />
+            android:id="@+id/widgetIcon"
+            android:src="@drawable/ic_refresh_black_24dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0"
+            android:text="-°C"
             android:textColor="#000"
             android:id="@+id/widgetTemp"
             android:textSize="25dp"
@@ -34,9 +36,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#000"
-        android:text="Windy"
+        android:text="refresh"
         android:id="@+id/widgetWeth"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/rl"
         android:layout_marginTop="5dp"/>

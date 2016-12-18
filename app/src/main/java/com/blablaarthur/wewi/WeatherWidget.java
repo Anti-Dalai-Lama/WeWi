@@ -46,8 +46,10 @@ public class WeatherWidget extends AppWidgetProvider {
         myWidgetManager = appWidgetManager;
 
         widgetId = appWidgetId;
-        WeatherControlla wc = new WeatherWidget.WeatherControlla();
-        wc.execute("http://api.worldweatheronline.com/premium/v1/weather.ashx?key=9c118fa8f39b44ae88b190557161612&q=50,36.25&format=json");
+        if(InternetReceiver.isOnline(context)) {
+            WeatherControlla wc = new WeatherWidget.WeatherControlla();
+            wc.execute("http://api.worldweatheronline.com/premium/v1/weather.ashx?key=9c118fa8f39b44ae88b190557161612&q=50,36.25&format=json");
+        }
     }
 
     @Override
@@ -114,7 +116,6 @@ public class WeatherWidget extends AppWidgetProvider {
                 URLConnection connection= url.openConnection();
                 InputStream inputStream= connection.getInputStream();
                 bitmap = BitmapFactory.decodeStream(inputStream);
-
             }
             catch (Exception e){
                 Log.d("A_R_T", e.toString());
@@ -133,6 +134,10 @@ public class WeatherWidget extends AppWidgetProvider {
                 views.setTextViewText(R.id.widgetTemp, temp);
                 views.setTextViewText(R.id.widgetWeth, des);
                 views.setImageViewBitmap(R.id.widgetIcon, bitmap);
+
+                int pixel = bitmap.getPixel(1,1);
+                views.setInt(R.id.widgetLayout, "setBackgroundColor", pixel);
+
                 myWidgetManager.updateAppWidget(widgetId, views);
             }
             catch (Exception e){
