@@ -46,9 +46,14 @@ public class WeatherWidget extends AppWidgetProvider {
         myWidgetManager = appWidgetManager;
 
         widgetId = appWidgetId;
-        if(InternetReceiver.isOnline(context)) {
-            WeatherControlla wc = new WeatherWidget.WeatherControlla();
-            wc.execute("http://api.worldweatheronline.com/premium/v1/weather.ashx?key=9c118fa8f39b44ae88b190557161612&q=50,36.25&format=json");
+        try {
+            if (InternetReceiver.isOnline(context)) {
+                WeatherControlla wc = new WeatherWidget.WeatherControlla();
+                wc.execute("http://api.worldweatheronline.com/premium/v1/weather.ashx?key=9c118fa8f39b44ae88b190557161612&q=50,36.25&format=json");
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -63,11 +68,16 @@ public class WeatherWidget extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         if(intent.getAction().equals(WEATHER_UPDATE)){
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            ComponentName thisWidget = new ComponentName(context.getApplicationContext(), WeatherWidget.class);
-            int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
-            if (appWidgetIds != null && appWidgetIds.length > 0) {
-                onUpdate(context, appWidgetManager, appWidgetIds);
+            try {
+                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                ComponentName thisWidget = new ComponentName(context.getApplicationContext(), WeatherWidget.class);
+                int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
+                if (appWidgetIds != null && appWidgetIds.length > 0) {
+                    onUpdate(context, appWidgetManager, appWidgetIds);
+                }
+            }
+            catch (Exception e){
+                e.printStackTrace();
             }
         }
     }
@@ -96,13 +106,7 @@ public class WeatherWidget extends AppWidgetProvider {
                     res.append(line);
                 }
                 Log.d("A_R_T", res.toString());
-            }
-            catch (Exception e){
-                Log.d("A_R_T", e.toString());
-                e.printStackTrace();
-            }
 
-            try {
                 String data = (new JSONObject(res.toString())).getString("data");
                 String currentWeather = (new JSONObject(data)).getString("current_condition");
                 JSONObject ob = new JSONArray(currentWeather).getJSONObject(0);
@@ -135,8 +139,10 @@ public class WeatherWidget extends AppWidgetProvider {
                 views.setTextViewText(R.id.widgetWeth, des);
                 views.setImageViewBitmap(R.id.widgetIcon, bitmap);
 
-                int pixel = bitmap.getPixel(1,1);
-                views.setInt(R.id.widgetLayout, "setBackgroundColor", pixel);
+                if(bitmap != null) {
+                    int pixel = bitmap.getPixel(1, 1);
+                    views.setInt(R.id.widgetLayout, "setBackgroundColor", pixel);
+                }
 
                 myWidgetManager.updateAppWidget(widgetId, views);
             }
