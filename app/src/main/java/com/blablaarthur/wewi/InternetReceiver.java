@@ -16,7 +16,6 @@ public class InternetReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if(isOnline(context)){
-            Log.d("A_R_T", "INTERNET!!!!!!!!!!!!");
             Intent intentSync = new Intent(context, WeatherWidget.class);
             intentSync.setAction(WeatherWidget.WEATHER_UPDATE);
             context.sendBroadcast(intentSync);
